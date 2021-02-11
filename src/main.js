@@ -4,8 +4,7 @@ import router from "./routers/router";
 import axios from "axios";
 import api from "./api/index";
 import store from "./store";
-import Vuetify from "vuetify";
-import "vuetify/dist/vuetify.min.css";
+import vuetify from "./plugins/vuetify";
 import moment from "moment/moment";
 import Toast from "@/components/Toast";
 
@@ -90,6 +89,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  Vuetify,
+  vuetify,
   render: (h) => h(App),
 }).$mount("#app");
