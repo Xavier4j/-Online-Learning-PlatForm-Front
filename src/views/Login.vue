@@ -90,6 +90,9 @@ export default {
   name: "Login",
   data() {
     return {
+      snackbar: false,
+      multiLine: true,
+      text: "3",
       //isLogin判断是登录还是注册
       isLogin: true,
       logInForm: {
@@ -159,6 +162,15 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          this.$toast({
+            color: "error",
+            mode: "",
+            snackbar: true,
+            text: "系统异常，请稍后重试！",
+            timeout: 3000,
+            x: "right",
+            y: "top",
+          });
         })
         .finally(() => {});
     },

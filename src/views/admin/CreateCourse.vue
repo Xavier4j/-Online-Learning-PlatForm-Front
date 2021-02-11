@@ -1,6 +1,5 @@
 <template>
   <v-container style="min-height:600px">
-    <v-file-input hide-input truncate-length="15"></v-file-input>
     <v-breadcrumbs :items="breadcrumbs">
       <template v-slot:divider>
         <v-icon>mdi-chevron-right</v-icon>

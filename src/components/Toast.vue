@@ -1,17 +1,21 @@
 <template>
   <v-snackbar
+    absolute
     v-model="snackbar"
-    :bottom="y === 'bottom'"
-    :color="color"
-    :left="x === 'left'"
-    :multi-line="mode === 'multi-line'"
-    :right="x === 'right'"
-    :timeout="timeout"
     :top="y === 'top'"
-    :vertical="mode === 'vertical'"
+    :bottom="y === 'bottom'"
+    :left="x === 'left'"
+    :right="x === 'right'"
+    :multi-line="mode === 'multi-line'"
+    :color="color"
   >
     {{ text }}
-    <v-btn dark text @click="snackbar = false">Close</v-btn>
+
+    <template v-slot:action="{ attrs }">
+      <v-btn color="white" small text v-bind="attrs" @click="snackbar = false">
+        Close
+      </v-btn>
+    </template>
   </v-snackbar>
 </template>
 

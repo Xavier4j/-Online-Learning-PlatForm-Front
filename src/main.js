@@ -9,8 +9,6 @@ import moment from "moment/moment";
 import Toast from "@/components/Toast";
 
 function showToast({ color, mode, snackbar, text, timeout, x, y }) {
-  console.log(123);
-  console.log(color + mode + snackbar + text + timeout + x + y);
   const toastComponent = new (Vue.extend(Toast))({
     el: document.createElement("div"),
     data() {
@@ -25,8 +23,7 @@ function showToast({ color, mode, snackbar, text, timeout, x, y }) {
       };
     },
   }).$mount();
-  console.log(123);
-  document.body.append(toastComponent.$el);
+  document.getElementById("app").append(toastComponent.$el);
 }
 
 //注册全局方法
