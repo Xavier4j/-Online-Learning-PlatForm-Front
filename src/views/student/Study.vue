@@ -1,26 +1,38 @@
 <template>
   <v-container>
     <v-carousel v-model="model">
-      <v-carousel-item v-for="(color, i) in colors" :key="color">
-        <v-sheet :color="color" height="100%" tile>
+      <v-carousel-item
+        v-for="(course, index) in courseList.slice(0, 4)"
+        :key="index"
+        :to="'course/' + course.id"
+      >
+        <v-img
+          :src="course.coverImageUrl"
+          class="white--text align-end"
+          height="100%"
+        >
+          <v-card-title v-text="course.name"></v-card-title>
+        </v-img>
+
+        <!-- <v-sheet height="100%" tile>
           <v-row class="fill-height" align="center" justify="center">
-            <div class="display-3">Slide {{ i + 1 }}</div>
+            <div class="display-3">{{ course.name }}</div>
           </v-row>
-        </v-sheet>
+        </v-sheet> -->
       </v-carousel-item>
     </v-carousel>
     <v-row>
       <v-col v-for="(course, index) in courseList" :key="index" cols="6">
         <v-card class="mt-5" color="#385F73" dark>
           <v-img
-            src="https://cdn.vuetifyjs.com/images/cards/house.jpg"
+            :src="course.coverImageUrl"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="200px"
           >
-            <v-chip class="ma-2" color="primary" style="float:right;top:-100px">
+            <!-- <v-chip class="ma-2" color="primary" style="float:right;top:-90px">
               Primary
-            </v-chip>
+            </v-chip> -->
             <v-card-title class="mb-6" style="font-size:20px">
               {{ course.name }}
             </v-card-title>
@@ -29,7 +41,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text>
+            <v-btn text :to="'course/' + course.id">
               开始学习！
             </v-btn>
           </v-card-actions>
@@ -40,10 +52,10 @@
         <v-btn
           v-else
           outlined
-          :disabled="isLastPage"
-          @click="getCourseList(plateId)"
-          :color="isLastPage ? 'gray' : 'orange'"
-          >{{ isLastPage ? "没有更多了" : "加载更多" }}</v-btn
+          :disabled="current > pages"
+          @click="getCourseList()"
+          :color="current > pages ? 'gray' : 'orange'"
+          >{{ current > pages ? "没有更多了" : "加载更多" }}</v-btn
         >
       </v-col>
     </v-row>
@@ -57,25 +69,13 @@ export default {
     return {
       model: 0,
       colors: ["primary", "secondary", "yellow darken-2", "red", "orange"],
-      courseList: [
-        { id: "1", name: "课程1", desc: "简介1" },
-        { id: "2", name: "课程2", desc: "简介2" },
-        { id: "1", name: "课程1", desc: "简介1" },
-        { id: "2", name: "课程2", desc: "简介2" },
-        { id: "1", name: "课程1", desc: "简介1" },
-        { id: "2", name: "课程2", desc: "简介2" },
-        { id: "1", name: "课程1", desc: "简介1" },
-        { id: "2", name: "课程2", desc: "简介2" },
-        { id: "1", name: "课程1", desc: "简介1" },
-        { id: "2", name: "课程2", desc: "简介2" },
-        { id: "1", name: "课程1", desc: "简介1" },
-        { id: "2", name: "课程2", desc: "简介2" },
-      ],
+      courseList: [],
       loading: false, //加载项
-      current: 0,
-      size: 20,
-      isLastPage: false,
-      totalCount: 0,
+      //分页
+      current: 1,
+      size: 15,
+      //总页数
+      pages: 0,
     };
   },
   methods: {
@@ -88,14 +88,11 @@ export default {
         })
         .then((res) => {
           if (res.data.code == 200) {
-            this.isLastPage = res.data.data.isLastPage;
-            if (!this.isLastPage) {
-              this.size++;
+            this.pages = res.data.data.pages;
+            if (this.current <= this.pages) {
+              this.current++;
             }
-            this.courseList.push(...res.data.data.list);
-            this.courseList.forEach((item) => {
-              item.show = false;
-            });
+            this.courseList.push(...res.data.data.records);
           } else {
             console.log("获取数据失败！");
           }

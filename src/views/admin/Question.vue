@@ -3,34 +3,36 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <!-- <v-btn text color="secondary"></v-btn> -->
-      <v-btn outlined color="primary" to="/admin/notice/create">
-        新增公告
+      <v-btn outlined color="primary" to="/admin/question/create">
+        新增问题
       </v-btn>
     </v-card-actions>
     <v-simple-table style="background:none">
       <template v-slot:default>
         <thead>
           <tr>
-            <th style="font-size:15px;" class="text-left">公告名称</th>
-            <th style="font-size:15px;" class="text-left">创建人</th>
+            <th style="font-size:15px;" class="text-left">问题名称</th>
+            <th style="font-size:15px;" class="text-left">题目类型</th>
+            <th style="font-size:15px;" class="text-left">知识点</th>
             <th style="font-size:15px;" class="text-left">创建时间</th>
             <th style="font-size:15px;" class="text-left">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(notice, index) in noticeList" :key="index">
-            <td>{{ notice.title }}</td>
-            <td>{{ notice.author.nickName }}</td>
+          <tr v-for="(question, index) in questionList" :key="index">
+            <td>{{ question.question.substring(0, 20) + "..." }}</td>
+            <td>{{ question.type | typeFormat }}</td>
+            <td>{{ question.point.point }}</td>
             <td>
-              {{ notice.createTime }}
+              {{ question.createTime }}
             </td>
             <td>
-              <v-icon small class="mr-2" @click="editNotice(notice.id)">
+              <v-icon small class="mr-2" @click="editItem(question.id)">
                 mdi-pencil
               </v-icon>
-              <v-icon small class="mr-2" @click="deleteNotice(notice.id)">
+              <!-- <v-icon small @click="deleteQuestion(question.id)">
                 mdi-delete
-              </v-icon>
+              </v-icon> -->
             </td>
           </tr>
         </tbody>
@@ -50,10 +52,10 @@
 
 <script>
 export default {
-  name: "Notice",
+  name: "Question",
   data() {
     return {
-      noticeList: [],
+      questionList: [],
       //分页
       current: 1,
       size: 15,
@@ -62,38 +64,20 @@ export default {
     };
   },
   methods: {
-    getNoticeList() {
+    getQuestionList() {
       this.$api
-        .searchNoticeList({ current: this.current, size: this.size })
+        .getQuestionList({ current: this.current, size: this.size })
         .then((res) => {
           if (res.data.code == 200) {
-            this.noticeList = res.data.data.records;
+            this.questionList = res.data.data.records;
             this.pages = res.data.data.pages;
           } else {
             console.log("获取数据失败！");
-            this.$toast({
-              color: "error",
-              mode: "",
-              snackbar: true,
-              text: res.data.msg,
-              timeout: 2000,
-              x: "right",
-              y: "top",
-            });
           }
         })
         .catch((err) => {
           console.log("获取数据失败！");
           console.log(err);
-          this.$toast({
-            color: "error",
-            mode: "",
-            snackbar: true,
-            text: "系统异常，请稍后重试！",
-            timeout: 2000,
-            x: "right",
-            y: "top",
-          });
         })
         .finally(() => {
           setTimeout(() => {
@@ -101,17 +85,17 @@ export default {
           }, 500);
         });
     },
-    editNotice(noticeId) {
+    editItem(questionId) {
       this.$router.push({
-        path: "/admin/notice/edit",
+        path: "/admin/question/edit",
         query: {
-          noticeId: noticeId,
+          questionId: questionId,
         },
       });
     },
-    deleteNotice(noticeId) {
+    deleteQuestion(questionId) {
       this.$api
-        .deleteNotice({ noticeId: noticeId })
+        .deleteQuestion({ questionId: questionId })
         .then((res) => {
           if (res.data.code == 200) {
             this.$toast({
@@ -123,11 +107,11 @@ export default {
               x: "right",
               y: "top",
             });
-            this.getNoticeList();
+            this.getQuestionList();
           } else {
             console.log("删除失败！");
             this.$toast({
-              color: "error",
+              color: "success",
               mode: "",
               snackbar: true,
               text: res.data.msg,
@@ -141,7 +125,7 @@ export default {
           console.log("删除失败！");
           console.log(err);
           this.$toast({
-            color: "error",
+            color: "success",
             mode: "",
             snackbar: true,
             text: "删除失败，请稍后重试！",
@@ -158,11 +142,29 @@ export default {
     },
     changePage(page) {
       console.log(page);
-      this.getNoticeList();
+      this.getQuestionList();
     },
   },
   mounted() {
-    this.getNoticeList();
+    this.getQuestionList();
+  },
+  filters: {
+    typeFormat(value) {
+      switch (value) {
+        case 0:
+          return "单选题";
+        case 1:
+          return "多选题";
+        case 2:
+          return "判断题";
+        case 3:
+          return "填空题";
+        case 4:
+          return "问答题题";
+        default:
+          return "";
+      }
+    },
   },
 };
 </script>

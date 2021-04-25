@@ -1,35 +1,57 @@
 <template>
   <v-container style="min-height:600px">
-    <v-card
-      color="#880E4F"
-      class="my-3"
-      dark
-      v-for="(exam, index) in examList"
-      :key="index"
-    >
+    <!-- <v-card class="my-3" v-for="(notice, index) in noticeList" :key="index">
       <v-card-title class="headline">
-        {{ exam.title }}
+        {{ notice.title }}
       </v-card-title>
 
       <v-card-subtitle>
-        {{ exam.startTime | DateFormat }} --- {{ exam.endTime | DateFormat }}
+        {{ notice.content.substring(0, 50) + "..." }}
       </v-card-subtitle>
 
       <v-card-actions>
-        <v-btn
-          text
-          outlined
-          :to="'exam/view/' + exam.id"
-          v-if="!exam.done"
-          :disabled="isEffectiveDate(exam.startTime, exam.endTime) != 0"
-        >
-          {{ isEffectiveDate(exam.startTime, exam.endTime) | statusFilter }}
-        </v-btn>
-        <v-btn text outlined :to="'exam/result/' + exam.id" v-else>
-          查看考试结果
+        <v-btn text :to="'notice/view/' + notice.id">
+          Read Now
         </v-btn>
       </v-card-actions>
-    </v-card>
+    </v-card> -->
+
+    <div v-for="(notice, index) in noticeList" :key="index">
+      <v-card class="my-3 px-3 py-1" flat :to="'notice/view/' + notice.id">
+        <v-row class="mt-2">
+          <v-avatar color="grey" size="60px" class="mx-4">
+            <v-img :src="notice.author.avatarUrl" />
+          </v-avatar>
+          <span style="font-size:16px">
+            {{ notice.author.nickName }}
+            <v-spacer></v-spacer>
+            <span style="font-size:13px">
+              {{ notice.createTime | DateFormat }}
+            </span>
+          </span>
+        </v-row>
+        <v-card-title class="my-1">
+          {{ notice.title }}
+        </v-card-title>
+
+        <v-card-subtitle class="text-p1 pb-0">
+          {{ notice.content.substring(0, 50) + "..." }}
+        </v-card-subtitle>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <span class="mx-1">
+            {{ notice.readNum + "  浏览" }}
+          </span>
+          <span class="mx-1">
+            <v-icon class="mx-2">mdi-comment</v-icon>
+            {{ notice.commentNum }}
+          </span>
+        </v-card-actions>
+      </v-card>
+      <v-divider></v-divider>
+    </div>
+
     <div class="text-center my-3">
       <v-pagination
         v-model="current"
@@ -42,16 +64,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import moment from "moment/moment";
 export default {
-  name: "Exam",
-  computed: {
-    ...mapState(["token"]),
-  },
+  name: "Notice",
   data() {
     return {
-      examList: [],
+      noticeList: [],
       //分页
       current: 1,
       size: 15,
@@ -60,25 +77,12 @@ export default {
     };
   },
   methods: {
-    isEffectiveDate(startTime, endTime) {
-      if (moment().isBefore(moment(startTime))) {
-        return -1;
-      } else if (moment().isAfter(moment(endTime))) {
-        return 1;
-      } else {
-        return 0;
-      }
-    },
-    getExamList() {
+    getNoticeList() {
       this.$api
-        .getPaperList({
-          userId: this.token,
-          current: this.current,
-          size: this.size,
-        })
+        .searchNoticeList({ current: this.current, size: this.size })
         .then((res) => {
           if (res.data.code == 200) {
-            this.examList = res.data.data.records;
+            this.noticeList = res.data.data.records;
             this.pages = res.data.data.pages;
           } else {
             console.log("获取数据失败！");
@@ -114,24 +118,12 @@ export default {
     },
     changePage(page) {
       console.log(page);
-      this.getExamList();
+      this.getNoticeList();
     },
   },
   created() {},
   mounted() {
-    this.getExamList();
-  },
-  filters: {
-    statusFilter(value) {
-      switch (value) {
-        case -1:
-          return "考试未开始";
-        case 0:
-          return "开始考试";
-        case 1:
-          return "考试已结束";
-      }
-    },
+    this.getNoticeList();
   },
 };
 </script>

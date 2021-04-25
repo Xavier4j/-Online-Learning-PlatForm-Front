@@ -7,60 +7,68 @@
         新增课程
       </v-btn>
     </v-card-actions>
-    <div class="ma-5" style="font-size:17px;">版主列表：</div>
     <v-simple-table style="background:none">
       <template v-slot:default>
         <thead>
           <tr>
-            <th style="font-size:15px;" class="text-left">昵称</th>
-            <th style="font-size:15px;" class="text-left">负责板块</th>
-            <th style="font-size:15px;" class="text-left">状态</th>
+            <th style="font-size:15px;" class="text-left">课程名称</th>
+            <th style="font-size:15px;" class="text-left">创建人</th>
+            <th style="font-size:15px;" class="text-left">创建时间</th>
             <th style="font-size:15px;" class="text-left">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(moderator, index) in moderatorList" :key="index">
-            <td>{{ moderator.moderatorProfile.nickname }}</td>
-            <td>{{ moderator.plateIds | plateFilter }}</td>
+          <tr v-for="(course, index) in courseList" :key="index">
+            <td>{{ course.name }}</td>
+            <td>{{ course.teacherId }}</td>
             <td>
-              <v-switch
-                v-model="moderator.status"
-                color="success"
-                :label="moderator.status ? '正常' : '禁用'"
-                @change="updateModerator(moderator.userId, moderator.status)"
-              ></v-switch>
+              {{ course.createTime }}
             </td>
             <td>
-              <v-btn
-                text
-                color="error"
-                @click="deleteModerator(moderator.userId)"
-                >删除</v-btn
-              >
+              <v-icon small class="mr-2" @click="editCourse(course.id)">
+                mdi-pencil
+              </v-icon>
+              <v-icon small class="mr-2" @click="deleteCourse(course.id)">
+                mdi-delete
+              </v-icon>
             </td>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
+    <!-- 分页 -->
+    <div class="text-center my-3">
+      <v-pagination
+        v-model="current"
+        :length="pages"
+        total-visible="10"
+        @input="changePage"
+      ></v-pagination>
+    </div>
   </v-container>
 </template>
 
 <script>
-import global from "../../assets/global";
 export default {
-  name: "Point",
+  name: "Course",
   data() {
     return {
-      moderatorList: [],
+      courseList: [],
+      //分页
+      current: 1,
+      size: 15,
+      //总页数
+      pages: 0,
     };
   },
   methods: {
-    getModeratorList() {
+    getCourseList() {
       this.$api
-        .getModeratorList()
+        .searchCourseList({ current: this.current, size: this.size })
         .then((res) => {
           if (res.data.code == 200) {
-            this.moderatorList = res.data.data;
+            this.courseList = res.data.data.records;
+            this.pages = res.data.data.pages;
           } else {
             console.log("获取数据失败！");
           }
@@ -75,43 +83,54 @@ export default {
           }, 500);
         });
     },
-    updateModerator(userId, status) {
-      this.$api
-        .updateModerator({
-          userId: userId,
-          status: status,
-        })
-        .then((res) => {
-          if (res.data.code == 200) {
-            console.log("修改成功！");
-          } else {
-            console.log("修改失败！");
-          }
-        })
-        .catch((err) => {
-          console.log("修改失败！");
-          console.log(err);
-        })
-        .finally(() => {
-          setTimeout(() => {
-            // this.loading = false;
-          }, 500);
-        });
+    editCourse(courseId) {
+      this.$router.push({
+        path: "/admin/course/edit",
+        query: {
+          courseId: courseId,
+        },
+      });
     },
-    deleteModerator(userId) {
-      console.log(userId);
+    deleteCourse(courseId) {
       this.$api
-        .deleteModerator({ userId: userId })
+        .deleteCourse({ courseId: courseId })
         .then((res) => {
           if (res.data.code == 200) {
-            console.log("删除成功！");
+            this.$toast({
+              color: "success",
+              mode: "",
+              snackbar: true,
+              text: res.data.msg,
+              timeout: 2000,
+              x: "right",
+              y: "top",
+            });
+            this.getCourseList();
           } else {
             console.log("删除失败！");
+            this.$toast({
+              color: "success",
+              mode: "",
+              snackbar: true,
+              text: res.data.msg,
+              timeout: 2000,
+              x: "right",
+              y: "top",
+            });
           }
         })
         .catch((err) => {
           console.log("删除失败！");
           console.log(err);
+          this.$toast({
+            color: "success",
+            mode: "",
+            snackbar: true,
+            text: "删除失败，请稍后重试！",
+            timeout: 2000,
+            x: "right",
+            y: "top",
+          });
         })
         .finally(() => {
           setTimeout(() => {
@@ -119,20 +138,13 @@ export default {
           }, 500);
         });
     },
+    changePage(page) {
+      console.log(page);
+      this.getCourseList();
+    },
   },
   mounted() {
-    this.getModeratorList();
-  },
-  filters: {
-    plateFilter(value) {
-      let plateIds = value;
-      let plateIdList = plateIds.split(",");
-      let plateList = [];
-      plateIdList.forEach((item) => {
-        plateList.push(global.plateList1[item].title);
-      });
-      return plateList.join(",");
-    },
+    this.getCourseList();
   },
 };
 </script>

@@ -6,7 +6,12 @@
       min-height="500"
       style="background:none"
     >
-      <v-alert outlined color="cyan" v-if="total === 0" border="left"
+      <v-alert
+        class="mt-2"
+        outlined
+        color="cyan"
+        v-if="total === 0"
+        border="left"
         >你没有任何消息！</v-alert
       >
       <v-row class="ma-2">
@@ -161,14 +166,14 @@ export default {
       this.messageLoading = true;
       this.$api
         .getMessageList({
-          receiver: this.token,
+          userId: this.token,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
         })
         .then((res) => {
           if (res.data.code == 200) {
-            this.messageList = res.data.data.list;
-            this.total = res.data.data.total;
+            this.messageList = res.data.data;
+            this.total = res.data.data.length;
           } else {
             console.log("获取数据失败！");
           }
@@ -199,8 +204,9 @@ export default {
     },
     deleteMessage(id) {
       this.$api
-        .deleteMessage({
+        .updateMessage({
           id: id,
+          isDelete: 1,
         })
         .then((res) => {
           if (res.data.code == 200) {
@@ -214,7 +220,7 @@ export default {
     },
   },
   mounted() {
-    // this.getMessageList();
+    this.getMessageList();
   },
 };
 </script>

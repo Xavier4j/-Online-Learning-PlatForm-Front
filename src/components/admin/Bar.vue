@@ -106,7 +106,7 @@ export default {
       if (this.token) {
         this.$api
           .getMessageCount({
-            receiver: this.token,
+            userId: this.token,
           })
           .then((res) => {
             if (res.data.code == 200) {
@@ -116,7 +116,6 @@ export default {
             }
           })
           .catch((err) => {
-            // this.$message.error("获取数据失败！");
             console.log(err);
           })
           .finally(() => {});

@@ -6,7 +6,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-text-field
+        <!-- <v-text-field
           v-model="search"
           flat
           solo-inverted
@@ -17,7 +17,7 @@
           placeholder="搜索课程"
           @change="toSearch"
           style="max-width:500px"
-        />
+        /> -->
 
         <v-badge
           class="ma-3"
@@ -96,10 +96,13 @@ export default {
       { title: "巩固", path: "/strengthen", icon: "mdi-strengthen" },
       { title: "测试", path: "/test", icon: "mdi-test" },
       { title: "考试", path: "/exam", icon: "mdi-exam" },
-      { title: "交流", path: "/communicate", icon: "mdi-communicate" },
+      { title: "公告", path: "/notice", icon: "mdi-communicate" },
       { title: "个人中心", path: "/profile", icon: "mdi-profile" },
-      { title: "搜索结果", path: "/search", icon: "mdi-search" },
-      { title: "课程内容", path: "/course", icon: "mdi-course" },
+      // { title: "搜索结果", path: "/search", icon: "mdi-search" },
+      // { title: "课程内容", path: "/course", icon: "mdi-course" },
+      // { title: "公告查看", path: "/notice/view", icon: "mdi-notice" },
+      // { title: "考试内容", path: "/exam/view", icon: "mdi-exam" },
+      // { title: "考试结果", path: "/exam/result", icon: "mdi-exam" },
     ],
     messages: 0,
     id_of_setinterval: "",
@@ -163,7 +166,7 @@ export default {
       if (this.token) {
         this.$api
           .getMessageCount({
-            receiver: this.token,
+            userId: this.token,
           })
           .then((res) => {
             if (res.data.code == 200) {
@@ -173,7 +176,6 @@ export default {
             }
           })
           .catch((err) => {
-            // this.$message.error("获取数据失败！");
             console.log(err);
           })
           .finally(() => {});
@@ -182,12 +184,12 @@ export default {
   },
   created() {
     console.log(this.$route.fullPath);
-    // this.getMessageCount();
-    // this.id_of_setinterval = setInterval(this.getMessageCount, 1000 * 60);
+    this.getMessageCount();
+    this.id_of_setinterval = setInterval(this.getMessageCount, 1000 * 60);
   },
   beforeDestroy() {
     console.log("destory");
-    // clearInterval(this.id_of_setinterval);
+    clearInterval(this.id_of_setinterval);
   },
 };
 </script>

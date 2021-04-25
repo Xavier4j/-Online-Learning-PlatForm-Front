@@ -16,7 +16,7 @@
         </v-avatar>
 
         <v-text-field
-          v-model="profile.nickname"
+          v-model="profile.nickName"
           :counter="16"
           placeholder="昵称"
           required
@@ -130,15 +130,41 @@ export default {
         .editUserProfile(this.profile)
         .then((res) => {
           if (res.data.code == 200) {
-            console.log("修改成功");
             this.$store.commit("SET_AVATAR", this.profile.avatarUrl);
+            this.$toast({
+              color: "success",
+              mode: "",
+              snackbar: true,
+              text: res.data.msg,
+              timeout: 2000,
+              x: "right",
+              y: "top",
+            });
           } else {
             console.log("获取数据失败！");
+            this.$toast({
+              color: "error",
+              mode: "",
+              snackbar: true,
+              text: res.data.msg,
+              timeout: 2000,
+              x: "right",
+              y: "top",
+            });
           }
         })
         .catch((err) => {
           console.log("获取数据失败！");
           console.log(err);
+          this.$toast({
+            color: "error",
+            mode: "",
+            snackbar: true,
+            text: "系统异常，请稍后重试！",
+            timeout: 2000,
+            x: "right",
+            y: "top",
+          });
         })
         .finally(() => {
           setTimeout(() => {

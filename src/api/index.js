@@ -91,209 +91,239 @@ export default {
     return axios.get(`${POST_URL}/course/search`, { params: params });
   },
   /**
+   * 查询课程内容
+   * @param {*} params
+   */
+  getCourse(params) {
+    return axios.get(`${POST_URL}/course/select`, { params: params });
+  },
+  /**
    * 获取评论列表
    * @param {*} params
    */
-  getPostCommentList(params) {
-    return axios.get(`${POST_URL}/get-comment`, { params: params });
-  },
-  /**
-   * 发布帖子
-   * @param {*} params
-   */
-  createPost(params) {
-    return axios.post(`${POST_URL}/post`, params);
-  },
-  /**
-   * 编辑帖子
-   * @param {*} params
-   */
-  editPost(params) {
-    return axios.post(`${POST_URL}/update-post`, params);
+  getCommentList(params) {
+    return axios.get(`${POST_URL}/comment/select`, { params: params });
   },
   /**
    * 评论
    * @param {*} params
    */
   sendComment(params) {
-    return axios.post(`${POST_URL}/comment`, params);
-  },
-  /**
-   * 置顶评论
-   * @param {*} params
-   */
-  stickComment(params) {
-    return axios.get(`${POST_URL}/stick-comment`, { params: params });
-  },
-  /**
-   * 删除评论
-   * @param {*} params
-   */
-  deleteComment(params) {
-    return axios.get(`${POST_URL}/delete-comment`, { params: params });
+    return axios.post(`${POST_URL}/comment/send`, params);
   },
   /**
    * 回复
    * @param {*} params
    */
   sendReply(params) {
-    return axios.post(`${POST_URL}/reply`, params);
-  },
-  /**
-   * 删除回复
-   * @param {*} params
-   */
-  deleteReply(params) {
-    return axios.get(`${POST_URL}/delete-reply`, { params: params });
+    return axios.post(`${POST_URL}/reply/send`, params);
   },
   /**
    * 获取未读消息数量
    * @param {*} params
    */
   getMessageCount(params) {
-    return axios.get(`${POST_URL}/count-message`, { params: params });
+    return axios.get(`${POST_URL}/message/count`, { params: params });
   },
   /**
    * 获取消息列表
    * @param {*} params
    */
   getMessageList(params) {
-    return axios.get(`${POST_URL}/select-message`, { params: params });
+    return axios.get(`${POST_URL}/message/select`, { params: params });
   },
   /**
-   * 修改留言
+   * 获取消息列表
    * @param {*} params
    */
   updateMessage(params) {
-    return axios.get(`${POST_URL}/update-message`, { params: params });
+    return axios.post(`${POST_URL}/message/update`, params);
   },
   /**
-   * 删除留言
+   * 获取错误记录列表
    * @param {*} params
    */
-  deleteMessage(params) {
-    return axios.get(`${POST_URL}/delete-message`, { params: params });
+  getWrongRecordList(params) {
+    return axios.get(`${POST_URL}/wrong-record/select`, { params: params });
   },
 
   //以下为管理员端接口
+  /**
+   * 发布课程
+   * @param {*} params
+   */
+  releaseCourse(params) {
+    return axios.post(`${POST_URL}/course/create`, params);
+  },
+  /**
+   * 修改课程
+   * @param {*} params
+   */
+  updateCourse(params) {
+    return axios.get(`${POST_URL}/course/update`, { params: params });
+  },
+  /**
+   * 删除课程
+   * @param {*} params
+   */
+  deleteCourse(params) {
+    return axios.get(`${POST_URL}/course/delete`, { params: params });
+  },
+  /**
+   * 获取知识点列表
+   * @param {*} params
+   */
+  getPointList(params) {
+    return axios.get(`${POST_URL}/point/selectAll`, { params: params });
+  },
+  /**
+   * 新增知识点
+   * @param {*} params
+   */
+  savePoint(params) {
+    return axios.post(`${POST_URL}/point/create`, params);
+  },
+  /**
+   * 获取试卷
+   * @param {*} params
+   */
+  getPaper(params) {
+    return axios.get(`${POST_URL}/paper/select`, { params: params });
+  },
+  /**
+   * 获取试卷列表
+   * @param {*} params
+   */
+  getPaperList(params) {
+    return axios.get(`${POST_URL}/paper/search`, { params: params });
+  },
+  /**
+   * 发布试卷
+   * @param {*} params
+   */
+  releasePaper(params) {
+    return axios.post(`${POST_URL}/paper/create`, params);
+  },
+  /**
+   * 获取答卷结果列表
+   * @param {*} params
+   */
+  getPaperResultList(params) {
+    return axios.get(`${POST_URL}/paper/result-list`, { params: params });
+  },
+  /**
+   * 导出答卷结果列表
+   * @param {*} params
+   */
+  exportResultList(params) {
+    return axios.get(`${POST_URL}/paper/export`, { params: params });
+  },
+  /**
+   * 修改试卷
+   * @param {*} params
+   */
+  updatePaper(params) {
+    return axios.post(`${POST_URL}/paper/update`, params);
+  },
+  /**
+   * 删除试卷
+   * @param {*} params
+   */
+  deletePaper(params) {
+    return axios.get(`${POST_URL}/paper/delete`, { params: params });
+  },
+  /**
+   * 提交答案
+   * @param {*} params
+   */
+  releaseAnswerList(params) {
+    return axios.post(`${POST_URL}/answer/insertBatch`, params);
+  },
 
   /**
-   * 获取论坛整体情感倾向分析
+   * 提交答案
    * @param {*} params
    */
-  getSentitiveAnalysis(params) {
-    return axios.get(`${POST_URL}/analyse-whole-sentiment`, { params: params });
+  gradeAnswer(params) {
+    return axios.get(`${POST_URL}/answer/grade`, { params: params });
   },
   /**
-   * 获取热门话题分析
+   * 获取考试结果
    * @param {*} params
    */
-  getTopicAnalysis(params) {
-    return axios.get(`${POST_URL}/analyse-topic`, { params: params });
+  getPaperResult(params) {
+    return axios.get(`${POST_URL}/paper/result`, { params: params });
   },
   /**
-   * 获取论坛热点分析
+   * 获取题目列表
    * @param {*} params
    */
-  getKeywordAnalysis(params) {
-    return axios.get(`${POST_URL}/analyse-keyword`, { params: params });
+  getQuestion(params) {
+    return axios.get(`${POST_URL}/question/selectById`, { params: params });
   },
   /**
-   * 获取论坛负面消息排行
+   * 获取题目列表
    * @param {*} params
    */
-  getNegativeAnalysis(params) {
-    return axios.get(`${POST_URL}/analyse-negative`, { params: params });
+  getQuestionList(params) {
+    return axios.get(`${POST_URL}/question/selectAll`, { params: params });
   },
   /**
-   * 通过Tag获取帖子列表
+   * 根据条件随机获取一个题目
    * @param {*} params
    */
-  getPostListByTag(params) {
-    return axios.get(`${POST_URL}/select-post-keyword`, { params: params });
+  getQuestionRandom(params) {
+    return axios.get(`${POST_URL}/question/selectOneRandom`, {
+      params: params,
+    });
   },
   /**
-   * 获取热门帖子列表
+   * 新增题目
    * @param {*} params
    */
-  getHotPostList(params) {
-    return axios.get(`${POST_URL}/select-hot`, { params: params });
+  saveQuestion(params) {
+    return axios.post(`${POST_URL}/question/create`, params);
   },
   /**
-   * 获取用户列表
+   * 删除题目
    * @param {*} params
    */
-  getUserList(params) {
-    return axios.get(`${POST_URL}/select-user`, { params: params });
+  deleteQuestion(params) {
+    return axios.get(`${POST_URL}/question/delete`, { params: params });
   },
   /**
-   * 修改用户
+   * 获取公告列表
    * @param {*} params
    */
-  updateUser(params) {
-    return axios.post(`${POST_URL}/update-user`, params);
+  searchNoticeList(params) {
+    return axios.get(`${POST_URL}/notice/search`, { params: params });
   },
   /**
-   * 获取模块列表
+   * 发布公告
    * @param {*} params
    */
-  getPlateList(params) {
-    return axios.get(`${POST_URL}/select-plate`, { params: params });
+  releaseNotice(params) {
+    return axios.post(`${POST_URL}/notice/create`, params);
   },
   /**
-   * 修改模块
+   * 获取公告
    * @param {*} params
    */
-  updatePlate(params) {
-    return axios.post(`${POST_URL}/update-plate`, params);
+  getNotice(params) {
+    return axios.get(`${POST_URL}/notice/select`, { params: params });
   },
   /**
-   * 获取版主列表
+   * 修改公告
    * @param {*} params
    */
-  getModeratorList(params) {
-    return axios.get(`${POST_URL}/select-moderator`, { params: params });
+  updateNotice(params) {
+    return axios.post(`${POST_URL}/notice/update`, params);
   },
   /**
-   * 修改版主
+   * 删除公告
    * @param {*} params
    */
-  updateModerator(params) {
-    return axios.post(`${POST_URL}/update-moderator`, params);
-  },
-  /**
-   * 删除版主
-   * @param {*} params
-   */
-  deleteModerator(params) {
-    return axios.get(`${POST_URL}/delete-moderator`, { params: params });
-  },
-  /**
-   * 获取申请列表
-   * @param {*} params
-   */
-  getApplyList(params) {
-    return axios.get(`${POST_URL}/select-apply`, { params: params });
-  },
-  /**
-   * 修改申请
-   * @param {*} params
-   */
-  updateApply(params) {
-    return axios.get(`${POST_URL}/update-apply`, { params: params });
-  },
-  /**
-   * 删除申请
-   * @param {*} params
-   */
-  deleteApply(params) {
-    return axios.get(`${POST_URL}/delete-apply`, { params: params });
-  },
-  /**
-   * 获取敏感词过滤列表
-   * @param {*} params
-   */
-  getFilterList(params) {
-    return axios.get(`${POST_URL}/select-filter`, { params: params });
+  deleteNotice(params) {
+    return axios.get(`${POST_URL}/notice/delete`, { params: params });
   },
 };

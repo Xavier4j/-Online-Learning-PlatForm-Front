@@ -6,13 +6,21 @@
           <div class="font-weight-light text-center">
             &copy; 2019, made with
             <v-icon class="mr-1" size="18">mdi-heart</v-icon>by
-            <v-chip class="mr-1" text-color="cyan" small color="#0000" label>Xavier</v-chip>for a better web.
+            <v-chip class="mr-1" text-color="cyan" small color="#0000" label
+              >GodLike</v-chip
+            >for a better web.
           </div>
         </v-col>
         <v-col cols="12">
           <div class="font-weight-light text-center">
-            <a target="_blank" href="http://www.beian.miit.gov.cn/" style="text-decoration:none">
-              <v-chip class="mr-1" text-color="orange" small color="#0000" label>豫ICP备20011397号</v-chip>
+            <a
+              target="_blank"
+              href="http://www.beian.miit.gov.cn/"
+              style="text-decoration:none"
+            >
+              <v-chip class="mr-1" text-color="orange" small color="#0000" label
+                >豫ICP备2051345号</v-chip
+              >
             </a>
           </div>
         </v-col>
@@ -29,24 +37,23 @@ export default {
     links: [
       {
         href: "#",
-        text: "Creative Tim"
+        text: "Creative Tim",
       },
       {
         href: "#",
-        text: "About Us"
+        text: "About Us",
       },
       {
         href: "#",
-        text: "Blog"
+        text: "Blog",
       },
       {
         href: "#",
-        text: "Licenses"
-      }
-    ]
-  })
+        text: "Licenses",
+      },
+    ],
+  }),
 };
 </script>
 
-<style lang="sass">
-</style>
+<style lang="sass"></style>

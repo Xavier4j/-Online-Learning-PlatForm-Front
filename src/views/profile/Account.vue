@@ -89,7 +89,7 @@ export default {
           newPassword: this.newPassword,
         })
         .then((res) => {
-          if (res.data.status) {
+          if (res.data.code == 200) {
             this.$toast({
               color: "success",
               mode: "",
@@ -117,6 +117,15 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          this.$toast({
+            color: "error",
+            mode: "",
+            snackbar: true,
+            text: "修改失败，请稍后重试！",
+            timeout: 3000,
+            x: "right",
+            y: "top",
+          });
         })
         .finally(() => {});
     },

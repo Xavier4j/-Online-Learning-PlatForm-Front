@@ -8,6 +8,8 @@
     :right="x === 'right'"
     :multi-line="mode === 'multi-line'"
     :color="color"
+    timeout="2000"
+    style="position:fixed;margin-top:100px"
   >
     {{ text }}
 

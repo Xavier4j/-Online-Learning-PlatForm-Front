@@ -63,24 +63,34 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-dialog v-model="dialog" persistent max-width="290">
-      <v-card>
-        <v-card-title class="headline">
-          你要进入哪个系统？
-        </v-card-title>
-        <v-card-text
-          >您当前的账号是教师账号，可以选择进入管理端或者学生端。</v-card-text
-        >
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="choose(1)">
-            学生端
-          </v-btn>
-          <v-btn color="green darken-1" text @click="choose(0)">
-            管理端
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+    <v-dialog
+      transition="dialog-top-transition"
+      v-model="dialog"
+      persistent
+      max-width="600px"
+      style="min-height:500px"
+    >
+      <template v-slot:default="">
+        <v-card>
+          <v-toolbar color="primary" dark>选择你要进入的系统</v-toolbar>
+          <v-card-text>
+            <div class="text-h2 pa-12">
+              <v-row style="text-align:center">
+                <v-col cols="6">
+                  <v-btn color="orange" dark x-large @click="choose(1)">
+                    学生端
+                  </v-btn>
+                </v-col>
+                <v-col cols="6">
+                  <v-btn color="error" dark x-large @click="choose(0)">
+                    管理端
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </div>
+          </v-card-text>
+        </v-card>
+      </template>
     </v-dialog>
   </v-app>
 </template>
@@ -186,7 +196,7 @@ export default {
         y: "top",
       });
       if (i == 0) {
-        this.$router.push("/admin/");
+        this.$router.push("/admin/course");
       } else {
         this.$router.push("/");
       }

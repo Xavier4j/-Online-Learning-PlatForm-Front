@@ -20,8 +20,16 @@ export default new Router({
           component: () => import("@/views/student/Study"),
         },
         {
+          name: "Course Study",
+          path: "course/:id",
+          component: () => import("@/views/student/Course"),
+        },
+        {
           name: "Strengthen",
           path: "strengthen",
+          meta: {
+            requireAuth: true, //添加该字段，表示访问该页面需要登录
+          },
           component: () => import("@/views/student/Strengthen"),
         },
         {
@@ -30,14 +38,51 @@ export default new Router({
           component: () => import("@/views/student/Test"),
         },
         {
+          name: "Test View",
+          path: "test/view/:id",
+          meta: {
+            requireAuth: true, //添加该字段，表示访问该页面需要登录
+          },
+          component: () => import("@/views/student/TestView"),
+        },
+        {
+          name: "Test Result",
+          path: "test/result/:id",
+          meta: {
+            requireAuth: true, //添加该字段，表示访问该页面需要登录
+          },
+          component: () => import("@/views/student/TestResult"),
+        },
+        {
           name: "Exam",
           path: "exam",
           component: () => import("@/views/student/Exam"),
         },
         {
-          name: "Communicate",
-          path: "communicate",
-          component: () => import("@/views/student/Communicate"),
+          name: "Exam View",
+          path: "exam/view/:id",
+          meta: {
+            requireAuth: true, //添加该字段，表示访问该页面需要登录
+          },
+          component: () => import("@/views/student/ExamView"),
+        },
+        {
+          name: "Exam Result",
+          path: "exam/result/:id",
+          meta: {
+            requireAuth: true, //添加该字段，表示访问该页面需要登录
+          },
+          component: () => import("@/views/student/ExamResult"),
+        },
+        {
+          name: "Notice",
+          path: "notice",
+          component: () => import("@/views/student/Notice"),
+        },
+        {
+          name: "Notice",
+          path: "notice/view/:id",
+          component: () => import("@/views/student/NoticeView"),
         },
         {
           name: "Search",
@@ -80,11 +125,11 @@ export default new Router({
         requireAdminAuth: true, //添加该字段，表示访问该页面需要登录管理员账号
       },
       children: [
-        {
-          name: "Home",
-          path: "home",
-          component: () => import("@/views/admin/Home"),
-        },
+        // {
+        //   name: "Home",
+        //   path: "home",
+        //   component: () => import("@/views/admin/Home"),
+        // },
         {
           name: "Course",
           path: "course",
@@ -93,6 +138,11 @@ export default new Router({
         {
           name: "Create Course",
           path: "course/create",
+          component: () => import("@/views/admin/CreateCourse"),
+        },
+        {
+          name: "Edit Course",
+          path: "course/edit",
           component: () => import("@/views/admin/CreateCourse"),
         },
         {
@@ -106,9 +156,54 @@ export default new Router({
           component: () => import("@/views/admin/Paper"),
         },
         {
+          name: "Create Paper",
+          path: "paper/create",
+          component: () => import("@/views/admin/CreatePaper"),
+        },
+        {
+          name: "Edit Paper",
+          path: "paper/edit",
+          component: () => import("@/views/admin/CreatePaper"),
+        },
+        {
+          name: "Paper Result",
+          path: "paper/result",
+          component: () => import("@/views/admin/PaperResult"),
+        },
+        {
+          name: "Grade Paper",
+          path: "paper/grade",
+          component: () => import("@/views/admin/GradePaper"),
+        },
+        {
+          name: "Question",
+          path: "question",
+          component: () => import("@/views/admin/Question"),
+        },
+        {
+          name: "Create Question",
+          path: "question/create",
+          component: () => import("@/views/admin/CreateQuestion"),
+        },
+        {
+          name: "Edit Question",
+          path: "question/edit",
+          component: () => import("@/views/admin/CreateQuestion"),
+        },
+        {
           name: "Notice",
           path: "notice",
           component: () => import("@/views/admin/Notice"),
+        },
+        {
+          name: "Create Notice",
+          path: "notice/create",
+          component: () => import("@/views/admin/CreateNotice"),
+        },
+        {
+          name: "Edit Notice",
+          path: "notice/edit",
+          component: () => import("@/views/admin/CreateNotice"),
         },
         {
           name: "Admin Message",
@@ -127,7 +222,7 @@ export default new Router({
         },
         {
           path: "*",
-          redirect: "home",
+          redirect: "course",
         },
       ],
     },
